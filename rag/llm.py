@@ -1,13 +1,16 @@
 import os
 import streamlit as st
+from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 
-@st.cache_resource
+load_dotenv()
+
+@st.cache_resource(show_spinner=False)
 def get_llm():
-    api_key = os.environ.get("GROQ_API_KEY")
+    api_key = os.getenv("GROQ_API_KEY")
 
     if not api_key:
-        st.error("GROQ_API_KEY is missing on Render.")
+        st.error("GROQ_API_KEY is missing.")
         st.stop()
 
     return ChatGroq(
