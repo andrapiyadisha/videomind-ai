@@ -365,9 +365,22 @@ def render_sidebar():
                 "🔍  Process Video",
                 type="primary",
                 use_container_width=True,
-                disabled=is_processing or not url_is_valid,
+                disabled=is_processing,
                 key="process_video_btn",
             )
+            
+            if process_clicked:
+
+                if not url:
+                    st.warning("⚠️ Please paste a YouTube URL.")
+                    st.stop()
+
+                if not url_is_valid:
+                    st.error("❌ Please enter a valid YouTube URL.")
+                    st.stop()
+
+                st.session_state.pending_process = True
+                st.rerun()
 
             if is_processing:
                 with st.spinner("Processing video..."):
