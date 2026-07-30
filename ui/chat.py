@@ -25,6 +25,9 @@ def _ask(question: str, retriever, chain):
 
     Returns (answer_text, docs, elapsed_seconds).
     """
+    
+    if retriever is None or chain is None:
+        return "⚠️ Please process a YouTube video first.", [], 0.0
 
     docs = retriever.invoke(question)
 
@@ -117,7 +120,13 @@ def render_chat_panel(video_metadata, retriever, chain):
                 st.rerun()
 
     # ---- Input box (Streamlit pins st.chat_input to the bottom natively) ---- #
-    typed_question = st.chat_input("Ask anything about this video...")
+    video_loaded = retriever is not None and chain is not None
+    if not video_loaded:
+        st.info("📹 Please paste a YouTube URL and click **Process Video** before asking questions.")
+    typed_question = st.chat_input(
+        "Ask anything about this video...",
+        disabled=not video_loaded
+    )
 
     st.markdown(
         '<div class="yt-disclaimer">⚠️ Answers are generated based on the video '
@@ -129,9 +138,14 @@ def render_chat_panel(video_metadata, retriever, chain):
     st.session_state.pending_question = None
 
     if question:
+        if not video_loaded:
+            st.warning("⚠️ Please process a YouTube video first.")
+            st.stop()
+
         st.session_state.messages.append(
             {"id": str(uuid.uuid4()), "role": "user", "content": question}
         )
+        
         render_user_message(question)
 
         model_name = "Groq Llama 3 (8B Instant)"
