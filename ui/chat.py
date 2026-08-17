@@ -70,7 +70,7 @@ def render_chat_panel(video_metadata, retriever, chain):
     if video_metadata:
         render_compact_header(
             video_metadata.get("title", "Untitled video"),
-            model_name="Groq Llama 3 (8B Instant)",
+            model_name="Groq openai/gpt-oss-120b",
         )
     else:
         render_hero()
@@ -148,7 +148,7 @@ def render_chat_panel(video_metadata, retriever, chain):
         
         render_user_message(question)
 
-        model_name = "Groq Llama 3 (8B Instant)"
+        model_name = "Groq openai/gpt-oss-120b"
 
         answer, docs, elapsed = _ask(question, retriever, chain)
 

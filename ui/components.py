@@ -16,7 +16,7 @@ def render_hero():
     )
 
 
-def render_compact_header(video_title: str, model_name: str = "Groq Llama 3"):
+def render_compact_header(video_title: str, model_name: str = "Groq openai/gpt-oss-120b"):
     """Small sticky ChatGPT-style header shown once a video is processed,
     with Ready + model badges on the right."""
 
